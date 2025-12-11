@@ -2,63 +2,62 @@
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
 
-echo =====================================================
-echo    NUCLEAR PUBLISH: Local Version -> GitHub (Force)
-echo =====================================================
+echo -----------------------------------------------------
+echo    NUCLEAR PUBLISH: Local Version -^> GitHub (Force)
+echo -----------------------------------------------------
 echo.
 
 :: --- SIKKERHETSSJEKK ---
-:: Vi sjekker om "remote origin" faktisk inneholder ordet "nutanix".
-:: Dette hindrer at du ved uhell kjører scriptet i feil mappe.
-echo 🔒 Checking safety locks (Repo name)...
+echo [INFO] Checking safety locks (Repo name)...
 git remote get-url origin | findstr /I "nutanix" >nul
 if errorlevel 1 (
     echo.
-    echo 🛑 CRITICAL ERROR: This does not look like the 'nutanix' repo!
-    echo    Remote URL does not contain 'nutanix'.
-    echo    Aborting to protect your other sites.
+    echo [!!] CRITICAL ERROR: This does not look like the 'nutanix' repo!
+    echo      Remote URL does not contain 'nutanix'.
+    echo      Aborting to protect your other sites.
     pause
     exit /b 1
 )
-echo ✅ Safety check passed. Correct repo detected.
+echo [OK]   Safety check passed. Correct repo detected.
 echo.
 
 :: --- RENSING ---
-echo 🧹 Cleaning old build files...
-if exist docs rmdir /s /q docs
-if exist public rmdir /s /q public
+echo [INFO] Cleaning old build files...
+:: Vi sender feilmeldinger til nul i tilfelle en fil er i bruk. Hugo rydder uansett opp.
+if exist docs rmdir /s /q docs >nul 2>&1
+if exist public rmdir /s /q public >nul 2>&1
 
 :: --- BYGGING (HUGO) ---
-echo 🏗️  Building site (Hugo Extended)...
-hugo --minify --cleanDestinationDir
+echo [INFO] Building site (Hugo Extended)...
+:: --quiet gjør at Hugo holder kjeft med mindre noe går galt
+hugo --minify --cleanDestinationDir --quiet
 if errorlevel 1 (
-    echo ❌ Hugo Build Failed! Fix errors and try again.
+    echo [!!] Hugo Build Failed! Fix errors and try again.
     pause
     exit /b 1
 )
+echo [OK]   Build complete.
 
 :: --- GIT OPERASJONER ---
-echo 📦 Staging all files...
-git add .
+echo [INFO] Staging all files...
+:: Sender output til nul for å slippe LF/CRLF spam
+git add . >nul 2>&1
 
-:: Lager en tidsstempel for commit-meldingen
+:: Penere tidsstempel uten millisekunder
 for /f "tokens=1-3 delims=. " %%a in ('date /t') do set CDATE=%%c-%%b-%%a
-set CTIME=%time: =0%
+set CTIME=%time:~0,5%
 set MSG=Force Update: %CDATE% %CTIME%
 
-echo 💾 Committing: "%MSG%"...
-:: Vi bruker "allow-empty" i tilfelle du bare re-publiserer uten endringer
-git commit --allow-empty -m "%MSG%"
+echo [INFO] Committing: "%MSG%"...
+git commit --allow-empty -m "%MSG%" >nul
 
 :: --- THE NUCLEAR OPTION ---
-:: Her bruker vi --force. Det betyr: "Jeg driter i hva GitHub har.
-:: Min PC har rett. Overskriv alt der ute."
-echo 🚀 OVERWRITING GitHub (origin main --force)...
+echo [INFO] OVERWRITING GitHub (origin main --force)...
 git push origin main --force
 
 echo.
-echo =====================================================
-echo ✅ SUCCESS! Local version is now enforced on GitHub.
-echo 🌍 Check it out: https://bgronas.github.io/nutanix/
-echo =====================================================
+echo -----------------------------------------------------
+echo [OK]   SUCCESS! Local version is now enforced on GitHub.
+echo        Live at: https://bgronas.github.io/nutanix/
+echo -----------------------------------------------------
 pause
