@@ -28,7 +28,7 @@ const noMatchesFound = 'No results found';
 const doc = document.documentElement;
 const inline = ":inline";
 // variables read from your hugo configuration
-let showImagePosition = "<no value>";
+let showImagePosition = "true";
 
 const showImagePositionLabel = '<no value>';
 

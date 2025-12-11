@@ -1,40 +1,150 @@
-baseURL = "https://bgronas.github.io/nutanix/" 
-languageCode = "en-us"
+# ---------------------------------------------------------
+# GLOBAL SETTINGS (GitHub Pages & Project Site)
+# ---------------------------------------------------------
+baseURL = "https://bgronas.github.io/nutanix/"
 title = "Nutanix Dump"
 theme = "hugo-clarity"
-publishDir = "docs"           # VIKTIG: GitHub Pages leser fra denne mappen
-enableRobotsTXT = true
-canonifyURLs = true           # Hjelper med å fikse stier på Project Pages
+languageCode = "en-us"
 
+# GitHub Pages Deployment Settings
+publishDir = "docs"           
+enableRobotsTXT = true
+canonifyURLs = true           
+
+# General Logic
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+hasCJKLanguage = false
+summaryLength = 140
+
+# ---------------------------------------------------------
+# PARAMETERS (Theme Specifics)
+# ---------------------------------------------------------
 [params]
+  # --- Branding & Author ---
   author = "Bengt Grønås"
   email = "mail@bengt.no"
-  description = "Nutanix Technical Dives"
+  description = "Nutanix Technical Deep Dives"
+  introDescription = "Nutanix Technical Dump"
   
-  # Layout
-  usePageBundles = true
-  mainSections = ["post"]
-  dateFormat = "2006-01-02"
-  
-  # "Nutanix Dark Mode" look
-  enforceDarkMode = true 
-  custom_background_color = "#0b0b0b" 
-  custom_font_color = "#e0e0e0"
-  
+  # Logoer
   logo = "img/nutanix_logo.png"
+  footerLogo = "img/nutanix_logo.png"
+  shareImage = "share.png"
+  fallBackOgImage = "thumbnail.png"
+  iconsDir = "icons/"
+
+  # --- Layout & Visuals (NUTANIX LIGHT MODE) ---
+  # Vi tvinger Light Mode, men med myke farger
+  enforceDarkMode = false
+  enforceLightMode = true
+  
+  # Fargepalett: Soft Light & Nutanix Purple
+  custom_background_color = "#fafafa"   # Ikke "screaming white", men soft off-white
+  custom_font_color = "#212121"         # Myk sort (Open Sans look)
+  color_primary = "#6D4CD4"             # Klassisk Nutanix Lilla (for linker/detaljer)
+
+  # Font Setup (Forsøk på å styre font via config hvis temaet støtter det)
+  font_family = "'Open Sans', sans-serif"
+  
+  # Navigation & UI
   mobileNavigation = "left"
+  titleSeparator = "|"
+  figurePositionShow = true
+  showRelatedInSidebar = true
+  showRelatedInArticle = true
+  
+  # Content Listings
+  usePageBundles = true
+  mainSections = ["post", "blog"]
+  numberOfTagsShown = 4
+  numberOfRecentPosts = 8
+  numberOfFeaturedPosts = 0 
 
-  # Code blocks
-  codeMaxLines = 20
-  codeLineNumbers = true
+  # --- Code Blocks ---
+  codeMaxLines = 30         
+  codeLineNumbers = true    
+  
+  # --- Meta & Analytics ---
+  googleAnalytics = "G-63N9K3EZWP"
+  enableMathNotation = true
+  largeTwitterCard = true
+  showShare = true
+  comments = false
+  
+  # --- Footer ---
+  since = 2021
+  dateFormat = "2006-01-02" 
+  rss_summary = true
 
+  [params.footer]
+    copyright = "© {year} Bengt Grønås — VCF9 & Nutanix Automation"
+
+# ---------------------------------------------------------
+# LANGUAGES
+# ---------------------------------------------------------
+[languages]
+  [languages.en]
+    languageCode = "en-us"
+    languageName = "English"
+    weight = 1
+    contentDir = "content" 
+
+# ---------------------------------------------------------
+# MARKUP (Syntax Highlighting for Light Mode)
+# ---------------------------------------------------------
 [markup]
   [markup.highlight]
-    style = "monokai"
+    style = "tango"         # Byttet fra 'monokai' til 'tango' som passer bedre på lys bakgrunn
     lineNos = true
+    noClasses = false
+    guessSyntax = true
 
+  [markup.goldmark.renderer]
+    unsafe = true           
+
+# ---------------------------------------------------------
+# MENUS
+# ---------------------------------------------------------
 [menu]
   [[menu.main]]
     name = "Home"
     url = "/"
     weight = 1
+
+  [[menu.main]]
+    name = "Instagram"
+    url = "https://www.instagram.com/greenhillprojects/"
+    weight = 2
+    pre = "instagram" 
+
+  [[menu.main]]
+    name = "Twitter"
+    url = "https://twitter.com/bgronas"
+    weight = 3
+    pre = "twitter"
+
+# ---------------------------------------------------------
+# OUTPUTS & SITEMAP
+# ---------------------------------------------------------
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+  term = ["HTML", "RSS"]
+  page = ["HTML"]
+
+[outputFormats.RSS]
+  baseName = "feed"
+  mediaType = "application/rss+xml"
+  isPlainText = true
+  rel = "alternate"
+  permalinkable = true
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.8
+  filename = "sitemap.xml"
+
+[services.rss]
+  limit = 42
