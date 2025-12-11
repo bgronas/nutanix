@@ -1,23 +1,22 @@
-# VIKTIG: BaseURL må matche repo-navnet ditt nøyaktig
 baseURL = "https://bgronas.github.io/nutanix/" 
 languageCode = "en-us"
-title = "My Secret Dump"
+title = "Nutanix Dump"
 theme = "hugo-clarity"
-publishDir = "docs" # Sender generert HTML til docs-mappen
+publishDir = "docs"           # VIKTIG: GitHub Pages leser fra denne mappen
 enableRobotsTXT = true
-canonifyURLs = true
+canonifyURLs = true           # Hjelper med å fikse stier på Project Pages
 
 [params]
   author = "Bengt Grønås"
   email = "mail@bengt.no"
-  description = "Nutanix Technical Deep Dives"
+  description = "Nutanix Technical Dives"
   
-  # Windows & Layout innstillinger
+  # Layout
   usePageBundles = true
   mainSections = ["post"]
   dateFormat = "2006-01-02"
   
-  # Dark Mode for "Hacker" feel
+  # "Nutanix Dark Mode" look
   enforceDarkMode = true 
   custom_background_color = "#0b0b0b" 
   custom_font_color = "#e0e0e0"
@@ -25,7 +24,7 @@ canonifyURLs = true
   logo = "img/nutanix_logo.png"
   mobileNavigation = "left"
 
-  # Kodeblokker
+  # Code blocks
   codeMaxLines = 20
   codeLineNumbers = true
 
